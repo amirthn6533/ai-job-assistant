@@ -1,0 +1,20 @@
+# Environment Variables (Sensitive credentials)
+.env
+
+# Local database
+*.db
+*.db-journal
+
+# Python caching
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local logs
+*.log
+debug_emails.log
+
+# IDE settings
+.vscode/
+.idea/

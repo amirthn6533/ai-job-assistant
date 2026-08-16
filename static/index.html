@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Job Assistant — Smart Career Analysis</title>
+    <meta name="description" content="AI-powered job matching: Analyze your CV against any job description with AI to find your perfect fit.">
+    
+    <!-- Favicon using SVG and emoji -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="logo">
+            <span class="logo-icon" aria-hidden="true">🤖</span>
+            <h1>AI Job Assistant</h1>
+        </div>
+        <p class="subtitle">Analyze your CV against any job description with AI</p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        
+        <!-- Tab Navigation -->
+        <nav class="tabs" aria-label="Main Navigation">
+            <button class="tab active" data-tab="analyze" id="tab-analyze" aria-selected="true">
+                📋 Analyze CV
+            </button>
+            <button class="tab" data-tab="search" id="tab-search" aria-selected="false">
+                🔍 Search Jobs
+            </button>
+            <button class="tab" data-tab="history" id="tab-history" aria-selected="false">
+                📊 History
+            </button>
+        </nav>
+
+        <!-- Analyze Tab Content -->
+        <div id="analyze-tab" class="tab-content active-tab-content">
+            <!-- Analysis Form -->
+            <section class="glass-card analysis-form-section">
+                <div class="form-group">
+                    <label for="cv-text">Your CV / Resume</label>
+                    <textarea id="cv-text" rows="8" placeholder="Paste your CV/Resume text here..."></textarea>
+                    
+                    <div class="upload-zone" id="upload-zone">
+                        <span class="upload-icon" style="font-size: 1.5rem; display: block; margin-bottom: 5px;">📄</span>
+                        <p>Drag & drop your resume (PDF/DOCX) or click to browse</p>
+                        <input type="file" id="file-input" accept=".pdf,.docx" hidden>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="job-description">Job Description</label>
+                    <textarea id="job-description" rows="8" placeholder="Paste the job description here..."></textarea>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="analyze-btn" class="btn-primary">
+                        🔍 Analyze Match
+                    </button>
+                    <button id="clear-btn" class="btn-secondary">
+                        Clear
+                    </button>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section id="results-container" class="results-container hidden">
+                <h2>Analysis Results</h2>
+                <div class="results-grid">
+                    <div class="result-card score-card" id="match-score">
+                        <h3>Match Score</h3>
+                        <div class="match-score-circle" id="match-score-circle">
+                            <span id="match-score-text">--%</span>
+                        </div>
+                    </div>
+                    <div class="result-card" id="strengths">
+                        <h3>✅ Key Strengths</h3>
+                        <ul id="key-strengths-list" class="result-list"></ul>
+                    </div>
+                    <div class="result-card" id="gaps">
+                        <h3>🔍 Skill Gaps</h3>
+                        <ul id="skill-gaps-list" class="result-list"></ul>
+                    </div>
+                    <div class="result-card" id="recommendations">
+                        <h3>💡 Recommendations</h3>
+                        <ul id="recommendations-list" class="result-list"></ul>
+                    </div>
+                </div>
+
+                <!-- ATS Optimization Button -->
+                <div style="display: flex; justify-content: center; margin-top: 1.5rem;">
+                    <button id="optimize-resume-btn" class="btn-primary" style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); font-weight: 600; padding: 12px 24px; border-radius: var(--border-radius); display: flex; align-items: center; gap: 8px;">
+                        ✨ Generate ATS-Optimized Resume
+                    </button>
+                </div>
+
+                <!-- Analysis Recommended Jobs -->
+                <div class="result-card recommended-jobs-analysis-card" id="analysis-recommendations-section" style="margin-top: 1.5rem; grid-column: 1 / -1;">
+                    <h3>🔥 Recommended Job Openings for Your Profile</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                        Based on your resume skills, we found these high-matching job openings:
+                    </p>
+                    <div id="analysis-recommended-jobs-list" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <!-- Top 3 matching jobs will be injected here -->
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Search Jobs Tab Content -->
+        <div id="search-tab" class="tab-content hidden">
+            <!-- Tip Banner for Local Jobs -->
+            <div style="background: rgba(99, 102, 241, 0.08); border-left: 4px solid var(--accent-1); padding: 15px; border-radius: 12px; margin-bottom: 1.5rem; font-size: 0.9rem; line-height: 1.6; color: var(--text-primary);">
+                💡 <strong>راهنمای مشاغل محلی بلغارستان (Jobs.bg / Dev.bg):</strong> 
+                از آنجایی که سایت‌های محلی بلغارستان (مثل Jobs.bg و Dev.bg) دسترسی API آزاد و رایگان ندارند، بخش جستجوی خودکار ما بیشتر موقعیت‌های بین‌المللی و دورکاری (Remote) را پوشش می‌دهد. برای بررسی و رتبه‌بندی هر شغل محلی در صوفیه، کافیست شرح شغل آن را از آن سایت‌ها کپی کرده و در تب <strong>📋 Analyze CV</strong> پیست کنید تا سیستم تحلیل دقیق و کاملی را با رزومه شما انجام دهد!
+            </div>
+
+            <section class="glass-card search-jobs-section">
+                <h2>🔍 Auto Job Search & AI Matching</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                    Find job listings matching your resume skills directly. You can refine your search with a custom keyword query below.
+                </p>
+                
+                <div class="form-group">
+                    <label for="search-query">Search Query / Keywords (Optional)</label>
+                    <input type="text" id="search-query" placeholder="e.g. Backend Developer, Python, QA" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: var(--text-primary); font-family: inherit; font-size: 0.95rem; margin-top: 5px;">
+                </div>
+
+                <div class="form-group" style="margin-top: 15px;">
+                    <label for="search-location">Location (Optional)</label>
+                    <input type="text" id="search-location" value="Sofia, Bulgaria" placeholder="e.g. Sofia, Bulgaria or Remote" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: var(--text-primary); font-family: inherit; font-size: 0.95rem; margin-top: 5px;">
+                </div>
+
+                <div class="action-buttons">
+                    <button id="search-jobs-btn" class="btn-primary">
+                        🔍 Search & AI Rank Jobs
+                    </button>
+                </div>
+            </section>
+
+            <!-- Email Alerts Subscription Section -->
+            <section class="glass-card job-alerts-section" style="margin-top: 1.5rem;">
+                <h3>📧 Get Email Alerts for New Matches</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">
+                    Subscribe to receive automatic email notifications whenever new high-matching jobs (>= 70%) are found based on your current resume, query, and location.
+                </p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
+                    <div style="flex: 1; min-width: 250px;">
+                        <label for="alert-email" style="font-size: 0.85rem; color: var(--text-secondary);">Email Address</label>
+                        <input type="email" id="alert-email" placeholder="your.email@example.com" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: var(--text-primary); font-family: inherit; font-size: 0.9rem; margin-top: 5px;">
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button id="subscribe-btn" class="btn-primary" style="padding: 10px 20px; font-size: 0.9rem;">
+                            🔔 Subscribe
+                        </button>
+                        <button id="unsubscribe-btn" class="btn-secondary" style="padding: 10px 20px; font-size: 0.9rem; border-color: rgba(239,68,68,0.4); color: var(--error);">
+                            Unsubscribe
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search Results Container -->
+            <section id="search-results-container" class="search-results-container hidden" style="margin-top: 2rem;">
+                <h2>Ranked Job Openings for You</h2>
+                <div id="jobs-list" style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem;">
+                    <!-- Job cards will be injected here -->
+                </div>
+            </section>
+        </div>
+
+        <!-- History Tab Content -->
+        <div id="history-tab" class="tab-content hidden">
+            <section class="glass-card history-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                    <h2>📊 CV Analysis History</h2>
+                    <button id="refresh-history-btn" class="btn-secondary" style="font-size: 0.85rem; padding: 6px 12px; border-radius: 8px;">
+                        🔄 Refresh List
+                    </button>
+                </div>
+                
+                <div id="history-list" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- History cards will be dynamically loaded here -->
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <p>Analyzing your profile...</p>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <p>Powered by Google Gemini AI • Built with ❤️</p>
+    </footer>
+
+    <!-- Cover Letter Modal -->
+    <div id="cover-letter-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px);">
+        <div class="glass-card" style="width: 90%; max-width: 650px; max-height: 85vh; display: flex; flex-direction: column; padding: 2rem; position: relative;">
+            <button id="close-modal-btn" style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; transition: var(--transition);" onmouseover="this.style.color='var(--error)'" onmouseout="this.style.color='var(--text-secondary)'">×</button>
+            <h2 style="margin-top: 0; color: var(--accent-1); display: flex; align-items: center; gap: 10px;">📝 Tailored Cover Letter</h2>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">Here is your customized cover letter. You can copy it directly using the button below.</p>
+            
+            <div id="modal-loading" style="display: none; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 0; flex: 1;">
+                <div class="spinner" style="width: 40px; height: 40px; border-width: 3px; margin: 0 auto 15px auto;"></div>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">Generating with Gemini...</p>
+            </div>
+            
+            <textarea id="cover-letter-text" readonly style="width: 100%; flex: 1; min-height: 250px; padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.25); border: 1px solid var(--glass-border); color: var(--text-primary); font-family: monospace; font-size: 0.9rem; line-height: 1.6; resize: none; margin-bottom: 1.5rem; outline: none; display: block;"></textarea>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button id="copy-letter-btn" class="btn-primary" style="padding: 10px 20px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+                    📋 Copy to Clipboard
+                </button>
+                <button id="close-modal-btn-bottom" class="btn-secondary" style="padding: 10px 20px; font-size: 0.9rem;">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optimized Resume Modal -->
+    <div id="optimizer-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px);">
+        <div class="glass-card" style="width: 90%; max-width: 750px; max-height: 85vh; display: flex; flex-direction: column; padding: 2rem; position: relative;">
+            <button id="close-optimizer-btn" style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; transition: var(--transition);" onmouseover="this.style.color='var(--error)'" onmouseout="this.style.color='var(--text-secondary)'">×</button>
+            <h2 style="margin-top: 0; color: #10b981; display: flex; align-items: center; gap: 10px;">✨ ATS-Optimized Resume</h2>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">This version of your resume highlights keywords and phrases from the job description to bypass ATS filters. <strong>No fake details were added.</strong></p>
+            
+            <div id="optimizer-loading" style="display: none; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 0; flex: 1;">
+                <div class="spinner" style="width: 40px; height: 40px; border-width: 3px; margin: 0 auto 15px auto; border-color: #10b981 transparent #10b981 transparent;"></div>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">Optimizing with Gemini...</p>
+            </div>
+            
+            <textarea id="optimized-resume-text" readonly style="width: 100%; flex: 1; min-height: 300px; padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.25); border: 1px solid var(--glass-border); color: var(--text-primary); font-family: monospace; font-size: 0.9rem; line-height: 1.6; resize: none; margin-bottom: 1.5rem; outline: none; display: block;"></textarea>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button id="copy-optimized-btn" class="btn-primary" style="background: linear-gradient(135deg, #10b981, #059669); padding: 10px 20px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+                    📋 Copy Optimized CV
+                </button>
+                <button id="close-optimizer-btn-bottom" class="btn-secondary" style="padding: 10px 20px; font-size: 0.9rem;">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
