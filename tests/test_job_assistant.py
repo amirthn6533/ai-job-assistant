@@ -1,6 +1,6 @@
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-﻿import pytest
+import pytest
 from models.requestmodel import JobRequest, JobSearchRequest
 
 def test_job_request_model():
