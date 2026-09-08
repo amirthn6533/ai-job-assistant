@@ -1,4 +1,4 @@
-﻿name: CI Pipeline
+name: CI Pipeline
 
 on:
   push:
@@ -28,3 +28,7 @@ jobs:
       - name: Verify compilation
         run: |
           python -m py_compile main.py app.py
+
+      - name: Run unit tests
+        run: |
+          pytest tests/

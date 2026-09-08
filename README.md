@@ -1,7 +1,9 @@
-﻿# 💼 AI Job Assistant | Automated Job Hunter, Skill Gap Analyzer & Resume Tailor
+# 💼 AI Job Assistant | Automated Job Hunter, Skill Gap Analyzer & Resume Tailor
 
 <div align="center">
 
+[![CI Pipeline](https://github.com/amirthn6533/ai-job-assistant/actions/workflows/ci.yml/badge.svg)](https://github.com/amirthn6533/ai-job-assistant/actions)
+![Status: Active Development](https://img.shields.io/badge/Status-Active_Development_v1.1-yellow?style=for-the-badge&logo=fastapi)
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=for-the-badge&logo=fastapi&logoColor=white)
 ![Google Gemini](https://img.shields.io/badge/Google_Gemini-AI-8E75C2?style=for-the-badge&logo=google&logoColor=white)
