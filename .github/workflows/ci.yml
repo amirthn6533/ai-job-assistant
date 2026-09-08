@@ -38,4 +38,4 @@ jobs:
 
       - name: Execute Automated Tests
         run: |
-          pytest tests/
+          PYTHONPATH=. pytest tests/
