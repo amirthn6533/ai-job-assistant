@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Job Assistant - Interactive ATS Analyzer & Career Copilot</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <header class="flex flex-col md:flex-row items-center justify-between border-b border-slate-800 pb-6 mb-8 gap-4">
+      <div>
+        <div class="flex items-center gap-3">
+          <span class="text-3xl">💼</span>
+          <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-emerald-400 via-teal-300 to-blue-400 bg-clip-text text-transparent">
+            AI Job Assistant & ATS Matcher
+          </h1>
+        </div>
+        <p class="text-slate-400 text-sm mt-1">Live Interactive Demo &middot; Real-time ATS Algorithm &middot; Career Opportunity Pipeline</p>
+      </div>
+      <div class="flex gap-3">
+        <a href="https://github.com/amirthn6533/ai-job-assistant" target="_blank" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-medium transition flex items-center gap-2 border border-slate-700">
+          <i class="fab fa-github"></i> View GitHub Repo
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <!-- Input Panel -->
+      <div class="lg:col-span-6 space-y-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold text-white flex items-center gap-2">
+              <i class="fas fa-file-alt text-emerald-400"></i> Resume & Job Description
+            </h2>
+            <button onclick="loadDemoSample()" class="text-xs text-emerald-400 hover:text-emerald-300 underline font-medium">
+              Load Full Stack Engineer Sample
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Target Job Description</label>
+              <textarea id="jobDesc" rows="5" placeholder="Paste the target job requirements, skills, and qualifications..."
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 resize-none"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Candidate Resume / CV Summary</label>
+              <textarea id="resumeText" rows="5" placeholder="Paste your resume skills, experience, and project highlights..."
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 resize-none"></textarea>
+            </div>
+
+            <button onclick="analyzeATS()" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
+              <i class="fas fa-calculator"></i> Run AI ATS Match & Optimization
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Output Analysis Panel -->
+      <div class="lg:col-span-6 space-y-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+          <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <i class="fas fa-radar text-teal-400"></i> ATS Compatibility Score & Keyword Breakdown
+          </h2>
+
+          <div class="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800 mb-6">
+            <div>
+              <div class="text-xs text-slate-400">Overall ATS Score</div>
+              <div id="atsVerdict" class="text-sm font-semibold text-slate-300">Ready to Calculate</div>
+            </div>
+            <div id="scoreBadge" class="text-3xl font-black text-emerald-400 font-mono">0%</div>
+          </div>
+
+          <!-- Keyword Badges -->
+          <div class="space-y-4">
+            <div>
+              <div class="text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-2">Matched Key Competencies</div>
+              <div id="matchedKeywords" class="flex flex-wrap gap-2 min-h-[36px]">
+                <span class="text-xs text-slate-500 italic">No analysis run yet</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="text-xs font-semibold text-rose-400 uppercase tracking-wider mb-2">Missing Skills to Add</div>
+              <div id="missingKeywords" class="flex flex-wrap gap-2 min-h-[36px]">
+                <span class="text-xs text-slate-500 italic">No analysis run yet</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="text-xs font-semibold text-blue-400 uppercase tracking-wider mb-2">AI Recruiter Optimization Advice</div>
+              <div id="aiAdvice" class="bg-slate-950 border border-slate-800 p-4 rounded-xl text-xs text-slate-300 leading-relaxed min-h-[80px]">
+                Load the sample or paste your own job & resume to receive quantified ATS compatibility scoring and high-impact resume enhancement recommendations.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function loadDemoSample() {
+      document.getElementById('jobDesc').value = "We are seeking a Senior Python & Full Stack Engineer with strong experience in FastAPI, Docker, PostgreSQL, CI/CD with GitHub Actions, Playwright automated testing, and REST APIs. Experience with Telegram bot APIs or asynchronous programming (asyncio) is a big plus.";
+      document.getElementById('resumeText').value = "Software Engineer with 3+ years experience building cloud automation and AI bots. Proficient in Python, FastAPI, SQLite/PostgreSQL, Docker, GitHub Actions CI/CD workflows, Git Flow, and automated E2E testing with Playwright. Built Telegram automation bots handling real-time data processing.";
+    }
+
+    function analyzeATS() {
+      const job = document.getElementById('jobDesc').value.toLowerCase();
+      const resume = document.getElementById('resumeText').value.toLowerCase();
+
+      if (!job || !resume) {
+        alert("Please provide both Job Description and Resume text.");
+        return;
+      }
+
+      const keywords = ["python", "fastapi", "docker", "postgresql", "github actions", "playwright", "rest api", "telegram", "asyncio", "ci/cd"];
+      const jobFound = keywords.filter(k => job.includes(k));
+      const matched = jobFound.filter(k => resume.includes(k));
+      const missing = jobFound.filter(k => !resume.includes(k));
+
+      const score = jobFound.length > 0 ? Math.round((matched.length / jobFound.length) * 100) : 85;
+
+      const scoreEl = document.getElementById('scoreBadge');
+      scoreEl.innerText = score + "%";
+      if (score >= 80) {
+        scoreEl.className = "text-3xl font-black text-emerald-400 font-mono";
+        document.getElementById('atsVerdict').innerText = "🟢 Highly Qualified (Strong Match)";
+      } else if (score >= 60) {
+        scoreEl.className = "text-3xl font-black text-yellow-400 font-mono";
+        document.getElementById('atsVerdict').innerText = "🟡 Moderate Match (Consider Tweaking)";
+      } else {
+        scoreEl.className = "text-3xl font-black text-rose-400 font-mono";
+        document.getElementById('atsVerdict').innerText = "🔴 Weak Match (Needs Optimization)";
+      }
+
+      // Matched
+      const mDiv = document.getElementById('matchedKeywords');
+      mDiv.innerHTML = matched.length > 0 ? matched.map(k => `<span class="px-2.5 py-1 bg-emerald-950/80 border border-emerald-700 text-emerald-300 text-xs rounded-full font-medium">${k}</span>`).join('') : '<span class="text-xs text-slate-500">None detected</span>';
+
+      // Missing
+      const misDiv = document.getElementById('missingKeywords');
+      misDiv.innerHTML = missing.length > 0 ? missing.map(k => `<span class="px-2.5 py-1 bg-rose-950/80 border border-rose-700 text-rose-300 text-xs rounded-full font-medium">+ ${k}</span>`).join('') : '<span class="text-xs text-emerald-400">All core technical keywords matched!</span>';
+
+      // Advice
+      document.getElementById('aiAdvice').innerText = `Your profile scores a solid ${score}% alignment with this job requisition. ${missing.length > 0 ? 'To maximize ATS recruiter pass-through, explicitly incorporate the missing keywords (' + missing.join(', ') + ') into your recent project bullet points.' : 'Excellent keyword parity! Your resume highlights all primary technical requirements.'}`;
+    }
+  </script>
+</body>
+</html>

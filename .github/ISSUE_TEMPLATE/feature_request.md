@@ -1,10 +1,19 @@
-﻿---
-name: Feature Request
-about: Suggest a new capability or job board integration
+---
+name: Feature request
+about: Suggest an idea or feature enhancement for this project
 title: '[FEATURE] '
-labels: 'enhancement'
+labels: enhancement
 assignees: ''
 ---
 
-**Feature Description**
-Describe the requested feature or ATS parsing improvement.
+### Problem Statement
+A clear and concise description of what problem this feature solves.
+
+### Proposed Solution
+A clear and concise description of what you want to happen.
+
+### Alternatives Considered
+A clear and concise description of any alternative solutions or features you've considered.
+
+### Additional Context
+Add any other context, UI/CLI mockups, or screenshots about the feature request here.
